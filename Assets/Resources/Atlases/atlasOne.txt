@@ -1,0 +1,36 @@
+{"frames": {
+
+"tile_0.png":
+{
+	"frame": {"x":2,"y":68,"w":64,"h":32},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":32,"w":64,"h":32},
+	"sourceSize": {"w":64,"h":64}
+},
+"tile_1.png":
+{
+	"frame": {"x":2,"y":68,"w":64,"h":32},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":32,"w":64,"h":32},
+	"sourceSize": {"w":64,"h":64}
+},
+"tile_2.png":
+{
+	"frame": {"x":2,"y":2,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
+	"image": "atlasOne.png",
+	"format": "RGBA8888",
+	"size": {"w":128,"h":128},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b2a1367ed385d2ddae89c0fbca95c5b7:1/1$"
+}
+}
