@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Main : MonoBehaviour {
 
+    FSprite player;
+
 	// Use this for initialization
 	void Start () {
 		FutileParams futileParams = new FutileParams(true, false, false, false);
@@ -17,11 +19,32 @@ public class Main : MonoBehaviour {
         FTmxMap tmxMap = new FTmxMap();
         tmxMap.LoadTMX("Maps/mapOne");
 
-        Futile.stage.AddChild(tmxMap);
+        FTilemap tilemap = (FTilemap)tmxMap.getLayerNamed("Tilemap");
+
+        FContainer tilemapLayer = new FContainer();
+        tilemapLayer.AddChild(tmxMap);
+
+        Futile.stage.AddChild(tilemapLayer);
+        player = new FSprite("tile_2");
+        FCamObject camera = new FCamObject();
+        camera.follow(player);
+
+        tilemap.clipNode = camera;
+
+        Futile.stage.AddChild(player);
+        Futile.stage.AddChild(camera);
 	}
-	
+    const float speed = 100.0f;
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        if (Input.GetKey(KeyCode.S))
+            player.y -= speed * UnityEngine.Time.deltaTime;
+        if (Input.GetKey(KeyCode.W))
+            player.y += speed * UnityEngine.Time.deltaTime;
+        if (Input.GetKey(KeyCode.A))
+            player.x -= speed * UnityEngine.Time.deltaTime;
+        if (Input.GetKey(KeyCode.D))
+            player.x += speed * UnityEngine.Time.deltaTime;
+        
+    }
 }

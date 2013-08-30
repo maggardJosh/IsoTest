@@ -74,7 +74,7 @@ public class FTmxMap : FContainer {
 		}
 		
 		// return the name of the file from wantedNode
-		XMLNode imageNode = wantedNode.children[1] as XMLNode;
+		XMLNode imageNode = wantedNode.children[0] as XMLNode;
 		string sourceString = imageNode.attributes["source"];
 		int startIndex = sourceString.LastIndexOf('/') + 1;
 		string returnValue = sourceString.Substring( startIndex , sourceString.LastIndexOf('.') - startIndex);

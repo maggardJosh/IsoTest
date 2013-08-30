@@ -228,7 +228,7 @@ public class FTilemap : FContainer {
 		if (_tilesWide < clipTilesWide || _clipWidth == 0 || _skipZero) {
 			clipTilesWide = _tilesWide;
 		}
-		int clipTilesHigh = Mathf.CeilToInt(_clipHeight / _tileHeight) + 2;
+		int clipTilesHigh = Mathf.CeilToInt(_clipHeight / (_tileHeight/3)) + 2;
 		if (_tilesHigh < clipTilesHigh || _clipHeight == 0 || _skipZero) {
 			clipTilesHigh = _tilesHigh;
 		}
@@ -293,8 +293,8 @@ public class FTilemap : FContainer {
 					
 					// offset sprite coordinates
 
-                    float cartX = i * _tileWidth + _tileWidth / 2;
-                    float cartY = j * _tileHeight - _tileHeight / 2;
+                    float cartX = i * _tileWidth ;
+                    float cartY = j * _tileHeight *2/3;
 
                     sprite.x = (cartX - cartY) / 2;
                     sprite.y = -(cartX + cartY) / 4;
