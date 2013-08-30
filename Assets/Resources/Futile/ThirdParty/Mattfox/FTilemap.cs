@@ -14,8 +14,8 @@ public class FTilemap : FContainer {
 	protected int _tilesWide;
 	protected int _tilesHigh;
 	
-	protected float _tileWidth;
-	protected float _tileHeight;
+	public float _tileWidth;
+	public float _tileHeight;
 	
 	protected FShader _shader;
 	
@@ -101,8 +101,9 @@ public class FTilemap : FContainer {
 				}
 				
 				if (tileChangedX || tileChangedY) {
-					int tileX = Mathf.FloorToInt((tile.x - _tileWidth / 2) / _tileWidth);
-					int tileY = Mathf.FloorToInt((-tile.y - _tileHeight / 2) / _tileHeight);
+                    Vector2 cartVect = getIso(tile.GetPosition());
+					int tileX = Mathf.FloorToInt((cartVect.x) / _tileWidth);
+					int tileY = Mathf.FloorToInt((cartVect.y) / _tileHeight * 2f/3f);
 					
 					if (repeatX) {
 						while (tileX < 0) {
@@ -126,7 +127,6 @@ public class FTilemap : FContainer {
 						tileX = -1;
 						tileY = -1;
 					}
-					
 					int frame = tileX + tileY * _tilesWide;
 					if (frame >= 0 && frame < _tileArray.GetLength(0)) {
 						int frameNum = _tileArray[frame];
@@ -295,9 +295,8 @@ public class FTilemap : FContainer {
 
                     float cartX = i * _tileWidth ;
                     float cartY = j * _tileHeight *2/3;
-
-                    sprite.x = (cartX - cartY) / 2;
-                    sprite.y = -(cartX + cartY) / 4;
+                    Vector2 isoPos = getIso(new Vector2(cartX, cartY));
+                    sprite.SetPosition(isoPos);
                     sprite.MoveToFront();
 
 					if (frame == 0) {
@@ -310,6 +309,24 @@ public class FTilemap : FContainer {
 		}
 		
 	}
+
+    public static Vector2 getIso(Vector2 cartVect)
+    {
+        Vector2 result = new Vector2();
+        result.x = (cartVect.x - cartVect.y) / 2;
+        result.y = -(cartVect.x + cartVect.y) / 4;
+        return result;
+    }
+
+    public static Vector2 getCart(Vector2 isoVect)
+    {
+        Vector2 result = new Vector2();
+
+        result.x = (isoVect.x - isoVect.y) * 2 + isoVect.x;
+        result.y = -(isoVect.y * 2 + isoVect.x);
+
+        return result;
+    }
 	
 	public float getLeft() {
 		float returnX = width;

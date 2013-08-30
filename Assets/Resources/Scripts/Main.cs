@@ -4,6 +4,7 @@ using System.Collections;
 public class Main : MonoBehaviour {
 
     FSprite player;
+    FTilemap tilemap;
 
 	// Use this for initialization
 	void Start () {
@@ -19,13 +20,13 @@ public class Main : MonoBehaviour {
         FTmxMap tmxMap = new FTmxMap();
         tmxMap.LoadTMX("Maps/mapOne");
 
-        FTilemap tilemap = (FTilemap)tmxMap.getLayerNamed("Tilemap");
+         tilemap = (FTilemap)tmxMap.getLayerNamed("Tilemap");
 
         FContainer tilemapLayer = new FContainer();
         tilemapLayer.AddChild(tmxMap);
 
         Futile.stage.AddChild(tilemapLayer);
-        player = new FSprite("tile_2");
+        player = new FSprite("rowbitToy_0");
         FCamObject camera = new FCamObject();
         camera.follow(player);
 
@@ -37,6 +38,10 @@ public class Main : MonoBehaviour {
     const float speed = 100.0f;
 	// Update is called once per frame
 	void Update () {
+        Vector2 pos = FTilemap.getCart(player.GetPosition());
+        pos.x /= tilemap._tileWidth;
+        pos.y /= tilemap._tileHeight / 2f / 3f;
+        RXDebug.Log(pos);
         if (Input.GetKey(KeyCode.S))
             player.y -= speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.W))
