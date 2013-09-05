@@ -10,7 +10,7 @@ public class Main : MonoBehaviour {
 	void Start () {
 		FutileParams futileParams = new FutileParams(true, false, false, false);
 
-		futileParams.AddResolutionLevel(960, 1.0f, 1.0f, "");
+		futileParams.AddResolutionLevel(480, 1.0f, 1.0f, "");
 		futileParams.origin = new Vector2(0.5f, 0.5f);
 		futileParams.backgroundColor = new Color(.2f, .2f, .2f);
 		Futile.instance.Init(futileParams);
@@ -26,7 +26,9 @@ public class Main : MonoBehaviour {
         tilemapLayer.AddChild(tmxMap);
 
         Futile.stage.AddChild(tilemapLayer);
-        player = new FSprite("rowbitToy_0");
+        player = new FSprite("jif_0");
+        player.x = 20;
+        player.y = -20;
         FCamObject camera = new FCamObject();
         camera.follow(player);
 
@@ -38,10 +40,9 @@ public class Main : MonoBehaviour {
     const float speed = 100.0f;
 	// Update is called once per frame
 	void Update () {
-        Vector2 pos = FTilemap.getCart(player.GetPosition());
-        pos.x /= tilemap._tileWidth;
-        pos.y /= tilemap._tileHeight / 2f / 3f;
-        RXDebug.Log(pos);
+       Vector2 pos =  tilemap.getCart(player.GetPosition() + Vector2.up * -player.height / 2);
+       
+        RXDebug.Log((player.GetPosition() + Vector2.up * -player.height / 2) + " " + pos);
         if (Input.GetKey(KeyCode.S))
             player.y -= speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.W))

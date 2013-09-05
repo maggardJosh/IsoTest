@@ -57,87 +57,7 @@ public class FTilemap : FContainer {
 	}
 	
 	virtual public void Update() {
-		if (_clipNode != null && !_skipZero) {
-			// get position of _clipNode relative to this
-			Vector2 relPos = StageToLocal(_clipNode.GetPosition());
-			
-			float xMin = relPos.x - _clipWidth / 2 - _tileWidth * 0.75f;
-			float yMin = relPos.y - _clipHeight / 2 - _tileHeight * 0.75f;
-			
-			// check if the _clipNode has moved enough to check tile positions
-			if (Mathf.Round(xMin / _tileWidth) == _clipPos.x && Mathf.Round(yMin / _tileHeight) == _clipPos.y) {
-				return;
-			}
-			_clipPos = new Vector2(Mathf.Round(xMin / _tileWidth), Mathf.Round(yMin / _tileHeight));
-			
-			float tileOffsetX = (Mathf.Floor(_clipWidth / _tileWidth) + 2) * _tileWidth;
-			float tileOffsetY = (Mathf.Floor(_clipHeight / _tileHeight) + 2) * _tileHeight;
-			
-			float xMax = xMin + tileOffsetX;
-			float yMax = yMin + tileOffsetY;
-			
-			foreach (FSprite tile in _tiles) {
-				bool tileChangedX = false;
-				bool tileChangedY = false;
-				while (tile.x < xMin) {
-					tile.x += tileOffsetX;
-					tileChangedX = true;
-				}
-				if (!tileChangedX) {
-					while (tile.x > xMax) {
-						tile.x -= tileOffsetX;
-						tileChangedX = true;
-					}
-				}
-				while (tile.y < yMin) {
-					tile.y += tileOffsetY;
-					tileChangedY = true;
-				} 
-				if (!tileChangedY) {
-					while (tile.y > yMax) {
-						tile.y -= tileOffsetY;
-						tileChangedY = true;
-					}
-				}
-				
-				if (tileChangedX || tileChangedY) {
-                    Vector2 cartVect = getIso(tile.GetPosition());
-					int tileX = Mathf.FloorToInt((cartVect.x) / _tileWidth);
-					int tileY = Mathf.FloorToInt((cartVect.y) / _tileHeight * 2f/3f);
-					
-					if (repeatX) {
-						while (tileX < 0) {
-							tileX += _tilesWide;
-						} 
-						while (tileX >= _tilesWide) {
-							tileX -= _tilesWide ;
-						}
-					} else if (tileX < 0 || tileX >= _tilesWide) { // display empty tile, outside of known data
-						tileX = -1;
-						tileY = -1;
-					}
-					if (repeatY) {
-						while (tileY < 0) {
-							tileY += _tilesHigh;
-						} 
-						while (tileY >= _tilesHigh) {
-							tileY -= _tilesHigh;
-						}
-					} else if (tileY < 0 || tileY >= _tilesHigh) { // display empty tile, outside of known data
-						tileX = -1;
-						tileY = -1;
-					}
-					int frame = tileX + tileY * _tilesWide;
-					if (frame >= 0 && frame < _tileArray.GetLength(0)) {
-						int frameNum = _tileArray[frame];
-						tile.element = Futile.atlasManager.GetElementWithName(_baseName+"_"+frameNum);
-						tile.isVisible = true;
-					} else {
-						tile.isVisible = false;
-					}
-				}
-			}
-		}
+		
 	}
 	
 	public void LoadText (string text, bool skipZero=true) {
@@ -293,8 +213,8 @@ public class FTilemap : FContainer {
 					
 					// offset sprite coordinates
 
-                    float cartX = i * _tileWidth ;
-                    float cartY = j * _tileHeight *2/3;
+                    float cartX = i ;
+                    float cartY = j;
                     Vector2 isoPos = getIso(new Vector2(cartX, cartY));
                     sprite.SetPosition(isoPos);
                     sprite.MoveToFront();
@@ -310,20 +230,20 @@ public class FTilemap : FContainer {
 		
 	}
 
-    public static Vector2 getIso(Vector2 cartVect)
+    public Vector2 getIso(Vector2 cartVect)
     {
         Vector2 result = new Vector2();
-        result.x = (cartVect.x - cartVect.y) / 2;
-        result.y = -(cartVect.x + cartVect.y) / 4;
+        result.x = (cartVect.x * this._tileWidth / 2 - cartVect.y * this._tileWidth / 2);
+        result.y = -(cartVect.x * this._tileHeight / 6 + cartVect.y * this._tileHeight / 6);
         return result;
     }
 
-    public static Vector2 getCart(Vector2 isoVect)
+    public Vector2 getCart(Vector2 isoVect)
     {
         Vector2 result = new Vector2();
 
-        result.x = (isoVect.x - isoVect.y) * 2 + isoVect.x;
-        result.y = -(isoVect.y * 2 + isoVect.x);
+        result.x = isoVect.x / this._tileWidth - 3 * isoVect.y / this._tileHeight;
+        result.y = -3 * isoVect.y / this._tileHeight - isoVect.x / this._tileWidth;
 
         return result;
     }

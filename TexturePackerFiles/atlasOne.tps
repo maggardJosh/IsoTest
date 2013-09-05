@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>unity</string>
         <key>textureFileName</key>
-        <filename>../Assets/Atlases/atlasOne.png</filename>
+        <filename>../Assets/Resources/Atlases/atlasOne.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../Assets/Atlases/atlasOne.txt</filename>
+        <filename>../Assets/Resources/Atlases/atlasOne.txt</filename>
         <key>multiPack</key>
         <false/>
         <key>mainExtension</key>
@@ -149,6 +149,7 @@
         <key>fileList</key>
         <array>
             <filename>Tilemap</filename>
+            <filename>Toys</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
