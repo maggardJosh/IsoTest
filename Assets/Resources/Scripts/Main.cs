@@ -51,7 +51,7 @@ public class Main : MonoBehaviour {
        if (Input.GetKey(KeyCode.D))
            player.isoX += speed * UnityEngine.Time.deltaTime;
        if (Input.GetKey(KeyCode.Space))
-           player.offGroundHeight += speed * UnityEngine.Time.deltaTime;
+           player.jump();
         
     }
 }
