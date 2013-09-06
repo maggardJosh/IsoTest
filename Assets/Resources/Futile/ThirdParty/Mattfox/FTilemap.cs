@@ -58,8 +58,8 @@ public class FTilemap : FContainer
 
         this.ListenForUpdate(Update);
     }
-    float tileDepthSpeed = 500;
-    int tileVisibleRadius = 6;
+    float tileDepthSpeed = 800;
+    int tileVisibleRadius = 10;
     virtual public void Update()
     {
         shouldSortByZ = true;
@@ -74,16 +74,18 @@ public class FTilemap : FContainer
                     FIsoTile tile = _tiles[x * this._tilesHigh + y] as FIsoTile;
                     if (tile == null)
                         continue;
-                    
+
                     if (Math.Abs(x - tileVect.x) < tileVisibleRadius && Math.Abs(y - tileVect.y) < tileVisibleRadius)
                         tile.isoHeight += tileDepthSpeed * UnityEngine.Time.deltaTime;
                     else
-                        tile.isoHeight -= tileDepthSpeed/2 * UnityEngine.Time.deltaTime;
+                        tile.isoHeight -= tileDepthSpeed / 5 * UnityEngine.Time.deltaTime;
 
                     if (x == Mathf.FloorToInt(tileVect.x) && y == Mathf.FloorToInt(tileVect.y))
                         tile.color = Color.green;
                     else
                         tile.color = Color.white;
+
+                    
                 }
 
         }
@@ -310,9 +312,9 @@ public class FTilemap : FContainer
         {
             case 0: return 0;
             case 1: return 0;
-            case 2: return 10;
-            case 3: return 20;
-            case 4: return 30;
+            case 2: return 16;
+            case 3: return 31;
+            case 4: return 48;
             default: return 0;
         }
     }

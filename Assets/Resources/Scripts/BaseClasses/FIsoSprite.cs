@@ -18,7 +18,7 @@ public class FIsoSprite : FSprite
     {
         if (tilemap == null)
             return;
-        Vector2 tileVect = tilemap.getCart(getIsoPosition() + Vector2.up * -height / 2);
+        Vector2 tileVect = tilemap.getCart(getMaxTile());
         this.sortZ = Mathf.FloorToInt(tileVect.x) * tilemap.heightInTiles + Mathf.FloorToInt(tileVect.y) + .5f;
     }
 
@@ -29,17 +29,28 @@ public class FIsoSprite : FSprite
         {
             _isoX = value;
             this.x = _isoX;
-            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
+            Vector2 maxTile = getMaxTile();
+            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(maxTile));
             if (shadow != null)
             {
                 shadow.x = _isoX;
-                if (tilemap != null)
-                    shadow.y = _isoY - height / 2 + shadow.height / 2 + tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
-                else
-                    shadow.y = _isoY - height / 2 + shadow.height / 2;
-                updateSort();
+                shadow.y = _isoY - height / 2 + shadow.height / 2 + isoHeight;
             }
+            updateSort();
         }
+    }
+
+    public Vector2 getMaxTile()
+    {
+        Vector2 bottomLeft = new Vector2(_isoX - width / 2, _isoY - height / 2);
+        Vector2 bottomRight = new Vector2(_isoX + width / 2, _isoY - height / 2);
+        Vector2 cartBottomLeft = tilemap.getCart(bottomLeft);
+        Vector2 cartBottomRight = tilemap.getCart(bottomRight);
+
+        if (cartBottomLeft.x * tilemap.heightInTiles + cartBottomLeft.y > cartBottomRight.x * tilemap.heightInTiles + cartBottomRight.y)
+            return bottomLeft;
+        else
+            return bottomRight;
     }
 
     public float isoY
@@ -48,14 +59,11 @@ public class FIsoSprite : FSprite
         set
         {
             _isoY = value;
-            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
+            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(getMaxTile()));
             this.y = _isoY + _isoHeight;
             if (shadow != null)
             {
-                if (tilemap != null)
-                    shadow.y = _isoY - height / 2 + shadow.height / 2 + tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
-                else
-                    shadow.y = _isoY - height / 2 + shadow.height / 2;
+                shadow.y = _isoY - height / 2 + shadow.height / 2 + isoHeight;
             }
             updateSort();
         }
