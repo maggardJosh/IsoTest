@@ -21,14 +21,14 @@ public class FTilemap : FContainer {
 	
 	// list of all tiles
 	protected int[] _tileArray;
-	protected List<FSprite> _tiles;
+	protected List<FIsoTile> _tiles;
 	
 	// size of clipping
 	protected float _clipWidth;
 	protected float _clipHeight;
 	
 	// node which is located at the center of the clipping size, most likely FCamObject
-	protected FNode _clipNode;
+	protected FIsoSprite _clipNode;
 	
 	protected bool _clipToScreen = false;
 	protected Vector2 _clipPos;
@@ -38,7 +38,7 @@ public class FTilemap : FContainer {
 	{
 		_baseName = elementBase;
 		
-		_tiles = new List<FSprite>();
+		_tiles = new List<FIsoTile>();
 		
 		_shader = FShader.defaultShader;
 		
@@ -48,8 +48,8 @@ public class FTilemap : FContainer {
 	public FTilemap (string elementBase) : base() 
 	{
 		_baseName = elementBase;
-		
-		_tiles = new List<FSprite>();
+
+        _tiles = new List<FIsoTile>();
 		
 		_shader = FShader.defaultShader;
 		
@@ -57,7 +57,22 @@ public class FTilemap : FContainer {
 	}
 	
 	virtual public void Update() {
-		
+        if (clipNode != null)
+        {
+            Vector2 tileVect = getCart(new Vector2(clipNode.isoX, clipNode.isoY));
+            for (int tileX = 0; tileX < widthInTiles; tileX++)
+            {
+                for (int tileY = 0; tileY < heightInTiles; tileY++)
+                {
+                    FIsoTile tile = getTile(tileX, tileY);
+                    if (tileX == tileVect.x && tileY == tileVect.y)
+                        tile.isoHeight += 100 * UnityEngine.Time.deltaTime;
+                    else
+                        tile.isoHeight -= 100 * UnityEngine.Time.deltaTime;
+                        
+                }
+            }
+        }
 	}
 	
 	public void LoadText (string text, bool skipZero=true) {
@@ -160,7 +175,7 @@ public class FTilemap : FContainer {
 			// make sure we have the right amount of tiles for the current clip size
 			if (_tiles.Count <= 0) {
 				for (int i = 0; i < totalNeeded; i++) {
-					FSprite sprite = new FSprite(_baseName + "_1"); // set to 1
+                    FIsoTile sprite = new FIsoTile(_baseName + "_1"); // set to 1
 					sprite.shader = _shader;
 					
 					// add to this collection
@@ -170,7 +185,7 @@ public class FTilemap : FContainer {
 			} else if (_tiles.Count < totalNeeded) {
 				int start = _tiles.Count;
 				for (int i = start; i < totalNeeded; i++) {
-						FSprite sprite = new FSprite(_baseName + "_1");
+                    FIsoTile sprite = new FIsoTile(_baseName + "_1");
 						sprite.shader = _shader;
 						
 						// add to this collection
@@ -201,9 +216,9 @@ public class FTilemap : FContainer {
 				int frame = _tileArray[i + (j*_tilesWide)];
 				
 				if (!_skipZero || frame > 0) {
-					FSprite sprite;
+					FIsoTile sprite;
 					if (_skipZero) {
-						sprite = new FSprite(_baseName + "_"+frame);
+                        sprite = new FIsoTile(_baseName + "_" + frame);
 						sprite.shader = _shader;
 						AddChild(sprite);
 					} else {
@@ -216,7 +231,9 @@ public class FTilemap : FContainer {
                     float cartX = i ;
                     float cartY = j;
                     Vector2 isoPos = getIso(new Vector2(cartX, cartY));
-                    sprite.SetPosition(isoPos);
+                    sprite.isoX = isoPos.x;
+                    sprite.isoY = isoPos.y;
+                    sprite.isoHeight = -100;
                     sprite.MoveToFront();
 
 					if (frame == 0) {
@@ -295,12 +312,12 @@ public class FTilemap : FContainer {
 	}
 	
 	// returns FSprite at 
-	public FSprite getTile(int givenX, int givenY) {
+	public FIsoTile getTile(int givenX, int givenY) {
 		if (!_skipZero) {
 			int node = (givenX % _tilesWide) + givenY * _tilesWide;
 			
 			if (node < _tilesWide * _tilesHigh) {
-				return _childNodes[node] as FSprite;
+				return _childNodes[node] as FIsoTile;
 			} else {
 				Debug.Log ("FTilemap: index [" + node + "] outside of range: " + (_tilesWide * _tilesHigh));
 				return null;
@@ -310,12 +327,12 @@ public class FTilemap : FContainer {
 		}
 	}
 	
-	public FSprite getTileAt(float givenX, float givenY) {
+	public FIsoTile getTileAt(float givenX, float givenY) {
 		if (!_skipZero) {
 			int node = (int)((_tilesWide % Mathf.Floor(givenX / _tileWidth)) + Mathf.Floor(givenY / _tileHeight) * _tilesWide);
 			
 			if (node < _tilesWide * _tilesHigh) {
-				return _childNodes[node] as FSprite;
+                return _childNodes[node] as FIsoTile;
 			} else {
 				Debug.Log ("FTilemap: index [" + node + "] outside of range: " + (_tilesWide * _tilesHigh));
 				return null;
@@ -331,7 +348,7 @@ public class FTilemap : FContainer {
 				float compareY = -Mathf.Floor((sprite.y + _tileHeight/2) / (float)_tileHeight);
 				
 				if (checkX == compareX && checkY == compareY) {
-					return sprite as FSprite;
+                    return sprite as FIsoTile;
 				}
 			}
 			
@@ -378,7 +395,7 @@ public class FTilemap : FContainer {
 		set { _clipHeight = value; }
 	}
 	
-	virtual public FNode clipNode {
+	virtual public FIsoSprite clipNode {
 		get { return _clipNode; }
 		set { _clipNode = value; }
 	}
