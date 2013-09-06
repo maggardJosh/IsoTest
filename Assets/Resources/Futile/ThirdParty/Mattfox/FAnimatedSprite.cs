@@ -36,7 +36,7 @@ public class FAnimatedSprite : FSprite {
 		_baseName = elementBase;
 		
 		// default to first frame, no animation
-		Init(FFacetType.Quad, Futile.atlasManager.GetElementWithName(_baseName+"_1"),1); // expects individual frames, in convention of NAME_#.EXT
+		Init(FFacetType.Quad, Futile.atlasManager.GetElementWithName(_baseName+"_0"),1); // expects individual frames, in convention of NAME_#.EXT
 		_isAlphaDirty = true;
 		UpdateLocalVertices();
 		

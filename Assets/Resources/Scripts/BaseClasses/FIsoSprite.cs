@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class FIsoSprite : FSprite
+public class FIsoSprite : FAnimatedSprite
 {
     private float _isoX;
     private float _isoY;
     private float _isoHeight;
+    private float _offGroundHeight;
 
     private FSprite shadow;
 
@@ -22,24 +23,63 @@ public class FIsoSprite : FSprite
         this.sortZ = Mathf.FloorToInt(tileVect.x) * tilemap.heightInTiles + Mathf.FloorToInt(tileVect.y) + .5f;
     }
 
-    public float isoX
+    private void updateActualPosition()
+    {
+        this.x = _isoX;
+        this.y = _isoY + _isoHeight + _offGroundHeight;
+        if (shadow != null)
+        {
+            shadow.x = _isoX;
+            shadow.y = _isoY - height / 2 + shadow.height / 2 + isoHeight;
+        }
+    }
+
+    public virtual float isoX
     {
         get { return _isoX; }
         set
         {
             _isoX = value;
-            this.x = _isoX;
-            Vector2 maxTile = getMaxTile();
-            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(maxTile));
-            if (shadow != null)
-            {
-                shadow.x = _isoX;
-                shadow.y = _isoY - height / 2 + shadow.height / 2 + isoHeight;
-            }
+            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(getMaxTile()));
             updateSort();
+            updateActualPosition();
         }
     }
 
+
+    public float isoY
+    {
+        get { return _isoY; }
+        set
+        {
+            _isoY = value;
+            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(getMaxTile()));
+           
+            updateSort();
+            updateActualPosition();
+        }
+    }
+
+    public float isoHeight
+    {
+        get { return _isoHeight; }
+        set
+        {
+            if (_isoHeight < value)
+            {
+                offGroundHeight -= (value - _isoHeight);
+            }
+            else if (_isoHeight > value)
+                offGroundHeight += (_isoHeight - value);
+            _isoHeight = Mathf.Max(0, value);
+            
+            updateActualPosition();
+        }
+    }
+
+    /**
+     * Returns closest tile the player is on (Used for depth sorting)
+     */
     public Vector2 getMaxTile()
     {
         Vector2 bottomLeft = new Vector2(_isoX - width / 2, _isoY - height / 2);
@@ -52,30 +92,17 @@ public class FIsoSprite : FSprite
         else
             return bottomRight;
     }
-
-    public float isoY
+    
+    public float offGroundHeight
     {
-        get { return _isoY; }
-        set
+        get
         {
-            _isoY = value;
-            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(getMaxTile()));
-            this.y = _isoY + _isoHeight;
-            if (shadow != null)
-            {
-                shadow.y = _isoY - height / 2 + shadow.height / 2 + isoHeight;
-            }
-            updateSort();
+            return _offGroundHeight;
         }
-    }
-
-    public float isoHeight
-    {
-        get { return _isoHeight; }
         set
         {
-            _isoHeight = Mathf.Max(0, value);
-            this.y = _isoY + _isoHeight;
+            _offGroundHeight = Mathf.Max(0, value);
+            updateActualPosition();
         }
     }
 

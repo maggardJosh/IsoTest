@@ -83,11 +83,13 @@ public class FTilemap : FContainer
                     if (x == Mathf.FloorToInt(tileVect.x) && y == Mathf.FloorToInt(tileVect.y))
                         tile.color = Color.green;
                     else
-                        tile.color = Color.white;
-
-                    
+                    {
+                        if (tile.color != Color.white)
+                        {
+                            tile.color = new Color(tile.color.r + 1.0f * UnityEngine.Time.deltaTime, 1.0f, tile.color.b + 1.0f * UnityEngine.Time.deltaTime);
+                        }
+                    }
                 }
-
         }
     }
 

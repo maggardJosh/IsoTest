@@ -41,16 +41,17 @@ public class Main : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
        Vector2 pos =  tilemap.getCart(player.GetPosition() + Vector2.up * -player.height / 2);
-       
-        if (Input.GetKey(KeyCode.S))
-            player.isoY -= speed * UnityEngine.Time.deltaTime;
-        if (Input.GetKey(KeyCode.W))
-            player.isoY += speed * UnityEngine.Time.deltaTime;
-        if (Input.GetKey(KeyCode.A))
-            player.isoX -= speed * UnityEngine.Time.deltaTime;
-        if (Input.GetKey(KeyCode.D))
-            player.isoX += speed * UnityEngine.Time.deltaTime;
 
+       if (Input.GetKey(KeyCode.S))
+           player.isoY -= speed * UnityEngine.Time.deltaTime;
+       if (Input.GetKey(KeyCode.W))
+           player.isoY += speed * UnityEngine.Time.deltaTime;
+       if (Input.GetKey(KeyCode.A))
+           player.isoX -= speed * UnityEngine.Time.deltaTime;
+       if (Input.GetKey(KeyCode.D))
+           player.isoX += speed * UnityEngine.Time.deltaTime;
+       if (Input.GetKey(KeyCode.Space))
+           player.offGroundHeight += speed * UnityEngine.Time.deltaTime;
         
     }
 }
