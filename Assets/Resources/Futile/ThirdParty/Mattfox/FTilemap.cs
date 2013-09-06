@@ -230,6 +230,26 @@ public class FTilemap : FContainer {
 		
 	}
 
+    public int getTileFromIso(Vector2 isoVect)
+    {
+        Vector2 cartVect = getCart(isoVect);
+
+        return getFrameNum(Mathf.FloorToInt(cartVect.x), Mathf.FloorToInt(cartVect.y));
+    }
+
+    public float getHeight(int tileNum)
+    {
+        switch(tileNum)
+        {
+            case 0: return 0;
+            case 1: return 0;
+            case 2: return 10;
+            case 3: return 20;
+            case 4: return 30;
+            default: return 0;
+        }
+    }
+
     public Vector2 getIso(Vector2 cartVect)
     {
         Vector2 result = new Vector2();

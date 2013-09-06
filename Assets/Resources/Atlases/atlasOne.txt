@@ -16,6 +16,14 @@
 	"spriteSourceSize": {"x":11,"y":15,"w":40,"h":64},
 	"sourceSize": {"w":64,"h":96}
 },
+"shadow.png":
+{
+	"frame": {"x":2,"y":100,"w":22,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":16},
+	"sourceSize": {"w":22,"h":16}
+},
 "tile_0.png":
 {
 	"frame": {"x":68,"y":84,"w":64,"h":32},
@@ -63,6 +71,6 @@
 	"format": "RGBA8888",
 	"size": {"w":256,"h":128},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:8b4062ee15de926c1e440da366636304:1/1$"
+	"smartupdate": "$TexturePacker:SmartUpdate:46218605b17b855c809214b17ea1f78a:1/1$"
 }
 }

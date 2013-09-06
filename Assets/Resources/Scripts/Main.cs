@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Main : MonoBehaviour {
 
-    FSprite player;
+    Player player;
     FTilemap tilemap;
 
 	// Use this for initialization
@@ -26,9 +26,10 @@ public class Main : MonoBehaviour {
         tilemapLayer.AddChild(tmxMap);
 
         Futile.stage.AddChild(tilemapLayer);
-        player = new FSprite("jif_0");
-        player.x = 20;
-        player.y = -20;
+        player = new Player(tilemap);
+        player.isoX = 20;
+        player.isoY = -20;
+        player.isoHeight = 0;
         FCamObject camera = new FCamObject();
         camera.follow(player);
 
@@ -44,13 +45,14 @@ public class Main : MonoBehaviour {
        
         RXDebug.Log((player.GetPosition() + Vector2.up * -player.height / 2) + " " + pos);
         if (Input.GetKey(KeyCode.S))
-            player.y -= speed * UnityEngine.Time.deltaTime;
+            player.isoY -= speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.W))
-            player.y += speed * UnityEngine.Time.deltaTime;
+            player.isoY += speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.A))
-            player.x -= speed * UnityEngine.Time.deltaTime;
+            player.isoX -= speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.D))
-            player.x += speed * UnityEngine.Time.deltaTime;
+            player.isoX += speed * UnityEngine.Time.deltaTime;
+
         
     }
 }
