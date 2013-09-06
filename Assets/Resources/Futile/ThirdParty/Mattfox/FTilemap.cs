@@ -59,26 +59,32 @@ public class FTilemap : FContainer
         this.ListenForUpdate(Update);
     }
     float tileDepthSpeed = 500;
-    int tileVisibleRadius = 4;
+    int tileVisibleRadius = 6;
     virtual public void Update()
     {
+        shouldSortByZ = true;
+
         if (clipNode != null)
         {
-            Vector2 tileVect = getCart(clipNode.GetPosition() + Vector2.up * -clipNode.height / 2);
+            Vector2 tileVect = getCart(clipNode.getIsoPosition() + Vector2.up * -clipNode.height / 2);
+           
             for (int x = 0; x < _tilesWide; x++)
                 for (int y = 0; y < _tilesHigh; y++)
                 {
-                    FIsoTile tile = _childNodes[x * this._tilesHigh + y] as FIsoTile;
+                    FIsoTile tile = _tiles[x * this._tilesHigh + y] as FIsoTile;
                     if (tile == null)
                         continue;
+                    
                     if (Math.Abs(x - tileVect.x) < tileVisibleRadius && Math.Abs(y - tileVect.y) < tileVisibleRadius)
                         tile.isoHeight += tileDepthSpeed * UnityEngine.Time.deltaTime;
                     else
                         tile.isoHeight -= tileDepthSpeed/2 * UnityEngine.Time.deltaTime;
+
+                    if (x == Mathf.FloorToInt(tileVect.x) && y == Mathf.FloorToInt(tileVect.y))
+                        tile.color = Color.green;
+                    else
+                        tile.color = Color.white;
                 }
-
-
-
 
         }
     }
@@ -258,6 +264,7 @@ public class FTilemap : FContainer
                         sprite = new FIsoTile(_baseName + "_" + frame);
                         sprite.shader = _shader;
                         AddChild(sprite);
+                        _tiles.Add(sprite);
                     }
                     else
                     {
@@ -274,6 +281,7 @@ public class FTilemap : FContainer
                     sprite.isoY = isoPos.y;
                     sprite.isoHeight = -10000;
                     sprite.MoveToFront();
+                    sprite.sortZ = (i * _tilesHigh + j);
 
                     if (frame == 0)
                     {

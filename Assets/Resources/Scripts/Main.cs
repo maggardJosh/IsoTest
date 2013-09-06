@@ -10,7 +10,7 @@ public class Main : MonoBehaviour {
 	void Start () {
 		FutileParams futileParams = new FutileParams(true, false, false, false);
 
-		futileParams.AddResolutionLevel(480, 1.0f, 1.0f, "");
+		futileParams.AddResolutionLevel(960, 1.0f, 1.0f, "");
 		futileParams.origin = new Vector2(0.5f, 0.5f);
 		futileParams.backgroundColor = new Color(.2f, .2f, .2f);
 		Futile.instance.Init(futileParams);
@@ -34,16 +34,14 @@ public class Main : MonoBehaviour {
         camera.follow(player);
 
         tilemap.clipNode = player;
-
-        Futile.stage.AddChild(player);
+        tilemap.AddChild(player);
         Futile.stage.AddChild(camera);
 	}
-    const float speed = 100.0f;
+    const float speed = 200.0f;
 	// Update is called once per frame
 	void Update () {
        Vector2 pos =  tilemap.getCart(player.GetPosition() + Vector2.up * -player.height / 2);
        
-        //RXDebug.Log((player.GetPosition() + Vector2.up * -player.height / 2) + " " + pos);
         if (Input.GetKey(KeyCode.S))
             player.isoY -= speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.W))

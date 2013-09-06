@@ -14,14 +14,22 @@ public class FIsoSprite : FSprite
 
     private FTilemap tilemap;
 
+    private void updateSort()
+    {
+        if (tilemap == null)
+            return;
+        Vector2 tileVect = tilemap.getCart(getIsoPosition() + Vector2.up * -height / 2);
+        this.sortZ = Mathf.FloorToInt(tileVect.x) * tilemap.heightInTiles + Mathf.FloorToInt(tileVect.y) + .5f;
+    }
+
     public float isoX
     {
         get { return _isoX; }
         set
         {
-            _isoX = value; 
+            _isoX = value;
             this.x = _isoX;
-            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY-height/2)));
+            isoHeight = tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
             if (shadow != null)
             {
                 shadow.x = _isoX;
@@ -29,6 +37,7 @@ public class FIsoSprite : FSprite
                     shadow.y = _isoY - height / 2 + shadow.height / 2 + tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
                 else
                     shadow.y = _isoY - height / 2 + shadow.height / 2;
+                updateSort();
             }
         }
     }
@@ -44,10 +53,11 @@ public class FIsoSprite : FSprite
             if (shadow != null)
             {
                 if (tilemap != null)
-                    shadow.y = _isoY - height / 2 + shadow.height / 2 + tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY-height/2)));
+                    shadow.y = _isoY - height / 2 + shadow.height / 2 + tilemap.getHeight(tilemap.getTileFromIso(new Vector2(_isoX, _isoY - height / 2)));
                 else
                     shadow.y = _isoY - height / 2 + shadow.height / 2;
             }
+            updateSort();
         }
     }
 
@@ -74,6 +84,23 @@ public class FIsoSprite : FSprite
         base.HandleAddedToContainer(container);
     }
 
+    public Vector2 getIsoPosition()
+    {
+        return new Vector2(_isoX, _isoY);
+    }
+
+    public override float sortZ
+    {
+        get
+        {
+            return base.sortZ;
+        }
+        set
+        {
+            base.sortZ = value;
+            shadow.sortZ = value;
+        }
+    }
     public override void HandleRemovedFromContainer()
     {
         shadow.RemoveFromContainer();
