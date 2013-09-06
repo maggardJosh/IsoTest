@@ -33,7 +33,7 @@ public class Main : MonoBehaviour {
         FCamObject camera = new FCamObject();
         camera.follow(player);
 
-        tilemap.clipNode = camera;
+        tilemap.clipNode = player;
 
         Futile.stage.AddChild(player);
         Futile.stage.AddChild(camera);

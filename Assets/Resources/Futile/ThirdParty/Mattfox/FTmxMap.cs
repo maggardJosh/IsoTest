@@ -8,7 +8,7 @@ public class FTmxMap : FContainer {
 	private List<XMLNode> _tilesets;
 	protected List<string> _layerNames;
 	
-	private FNode _clipNode; // for tilemaps
+	private FIsoSprite _clipNode; // for tilemaps
 	
 	public int objectStartInt = 1;
 
@@ -273,7 +273,7 @@ public class FTmxMap : FContainer {
 		return null;
 	}
 	
-	public FNode clipNode {
+	public FIsoSprite clipNode {
 		get { return _clipNode; }
 		set { _clipNode = value; }
 	}

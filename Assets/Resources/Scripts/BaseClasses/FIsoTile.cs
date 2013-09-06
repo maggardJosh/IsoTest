@@ -38,7 +38,7 @@ public class FIsoTile : FSprite
         get { return _isoHeight; }
         set
         {
-            _isoHeight = Mathf.Min(0, value);
+            _isoHeight = Mathf.Min(0, Mathf.Max(-100, value));
             this.y = _isoY + _isoHeight;
         }
     }

@@ -59,19 +59,16 @@ public class FTilemap : FContainer {
 	virtual public void Update() {
         if (clipNode != null)
         {
-            Vector2 tileVect = getCart(new Vector2(clipNode.isoX, clipNode.isoY));
-            for (int tileX = 0; tileX < widthInTiles; tileX++)
-            {
-                for (int tileY = 0; tileY < heightInTiles; tileY++)
-                {
-                    FIsoTile tile = getTile(tileX, tileY);
-                    if (tileX == tileVect.x && tileY == tileVect.y)
-                        tile.isoHeight += 100 * UnityEngine.Time.deltaTime;
-                    else
-                        tile.isoHeight -= 100 * UnityEngine.Time.deltaTime;
+            Vector2 tileVect = getCart(new Vector2(clipNode.isoX, clipNode.isoY + clipNode.height / 2));
+            
+                    FIsoTile tile = getTile(Mathf.FloorToInt(tileVect.x), Mathf.FloorToInt(tileVect.y));
+                    if (tile == null)
+                        return;
+                    
+                      //  tile.isoHeight += 100 * UnityEngine.Time.deltaTime;
                         
-                }
-            }
+                
+            
         }
 	}
 	
@@ -233,7 +230,7 @@ public class FTilemap : FContainer {
                     Vector2 isoPos = getIso(new Vector2(cartX, cartY));
                     sprite.isoX = isoPos.x;
                     sprite.isoY = isoPos.y;
-                    sprite.isoHeight = -100;
+                    sprite.isoHeight = 0;
                     sprite.MoveToFront();
 
 					if (frame == 0) {
