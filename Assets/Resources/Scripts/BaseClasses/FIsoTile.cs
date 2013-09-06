@@ -33,12 +33,15 @@ public class FIsoTile : FSprite
         }
     }
 
+    private float maxDepth = -200;
+
     public float isoHeight
     {
         get { return _isoHeight; }
         set
         {
-            _isoHeight = Mathf.Min(0, Mathf.Max(-100, value));
+            _isoHeight = Mathf.Min(0, Mathf.Max(maxDepth, value));
+            this.alpha = 1 - (_isoHeight / maxDepth);
             this.y = _isoY + _isoHeight;
         }
     }

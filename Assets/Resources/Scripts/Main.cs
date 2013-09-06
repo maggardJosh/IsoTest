@@ -43,7 +43,7 @@ public class Main : MonoBehaviour {
 	void Update () {
        Vector2 pos =  tilemap.getCart(player.GetPosition() + Vector2.up * -player.height / 2);
        
-        RXDebug.Log((player.GetPosition() + Vector2.up * -player.height / 2) + " " + pos);
+        //RXDebug.Log((player.GetPosition() + Vector2.up * -player.height / 2) + " " + pos);
         if (Input.GetKey(KeyCode.S))
             player.isoY -= speed * UnityEngine.Time.deltaTime;
         if (Input.GetKey(KeyCode.W))
